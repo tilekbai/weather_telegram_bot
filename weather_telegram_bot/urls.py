@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from weather.management.commands.bot import main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('telegram/webhook/', main)
 ]

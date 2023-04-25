@@ -83,7 +83,7 @@ def main():
         url_path=settings.TOKEN_BOT,
     )
     updater.bot.set_webhook(
-        url='https://bd7f-185-53-231-240.ngrok-free.app/telegram/webhook/' + settings.TOKEN_BOT
+        url='https://9eb2-185-53-231-240.ngrok-free.app/telegram/webhook/'
     )
 
 
@@ -91,4 +91,3 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
-
