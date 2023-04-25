@@ -2,11 +2,14 @@ from django.http import request
 from pyowm import OWM
 from weather_telegram_bot.settings import TOKEN_BOT, TOKEN_OWM
 from django.core.management.commands.runserver import Command as RunServerCommand
-from telegram import Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, filters, CallbackContext, MessageFilter
+from telegram import Update, bot
+from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContext, MessageFilter, Filters
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 
+
+from django.conf import settings
+from telegram.ext import Updater
 
 scheduler = BackgroundScheduler()
 
@@ -74,15 +77,18 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(MessageHandler(filter_float, echo))
 
-    updater.start_polling()
-    updater.idle()
+    updater.start_webhook(
+        listen='localhost',
+        port=8000,
+        url_path=settings.TOKEN_BOT,
+    )
+    updater.bot.set_webhook(
+        url='https://bd7f-185-53-231-240.ngrok-free.app/telegram/webhook/' + settings.TOKEN_BOT
+    )
 
-class Command(RunServerCommand):
-    def handle(self, *args, **options):
-        main()
-        super().handle(*args, **options)
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
+
